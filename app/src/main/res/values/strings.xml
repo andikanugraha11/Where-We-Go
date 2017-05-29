@@ -12,4 +12,5 @@
     <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">
        AIzaSyDWPycPE_o9BJFCml3TTdcG0CJMI_zIOXQ
    </string>
+    <string name="check_out">Ceckout</string>
 </resources>
