@@ -9,6 +9,9 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/input_tempat"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -20,11 +23,15 @@
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_deskripsi"
+
         android:layout_width="match_parent"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/input_deskripsi"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Deskripsi"
@@ -32,9 +39,45 @@
             android:gravity="top"/>
 
     </android.support.design.widget.TextInputLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical">
+        <Button
+            android:layout_width="85dp"
+            android:layout_height="85dp"
+            android:drawableTop ="@android:drawable/ic_menu_add"
+            android:textAlignment="center"
+            android:text="Gambar"
+            android:textSize="10dp"
+            />
+    </LinearLayout>
     <Button
-        android:id="@+id/pilihLokasi"
+        android:id="@+id/input_lokasi"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Pilih lokasi" />
+
+    <Button
+        android:id="@+id/submit"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Simpan" />
+
+    <TextView
+        android:id="@+id/latLang"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible"
+        />
+
 </LinearLayout>

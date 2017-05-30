@@ -38,7 +38,7 @@ public class AddPlace extends AppCompatActivity{
         mFirebase = new Firebase(FIREBASE_URL);
         mFirebase.child(FIREBASE_ROOT_NODE);
 
-        btnLokasi = (Button)findViewById(R.id.pilihLokasi);
+        btnLokasi = (Button)findViewById(R.id.input_lokasi);
         btnLokasi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
