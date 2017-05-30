@@ -2,13 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="io.github.andikanugraha11.wherewego">
 
-    <uses-permission
-        android:name="com.google.android.providers.gsf.permission.READ_GSERVICES"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-
-
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -22,10 +19,11 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".SplashScreen"
+            android:name=".Activity.SplashScreen"
             android:noHistory="true"
-            android:theme="@style/Splashscreen"
-            android:screenOrientation="portrait">                                                                                                                                                                                                                                                                                                                                                                                                         ">
+            android:screenOrientation="portrait"
+            android:theme="@style/Splashscreen">
+            ">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,9 +31,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".HomeActivity"
+            android:name=".Activity.HomeActivity"
             android:label="@string/title_activity_home"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activity.AddPlace"></activity>
     </application>
 
 </manifest>

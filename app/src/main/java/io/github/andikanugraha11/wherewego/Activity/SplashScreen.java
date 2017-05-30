@@ -1,4 +1,4 @@
-package io.github.andikanugraha11.wherewego;
+package io.github.andikanugraha11.wherewego.Activity;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -8,12 +8,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 
+import io.github.andikanugraha11.wherewego.R;
+
 public class SplashScreen extends AppCompatActivity {
     private ProgressBar progressBar;
 
-    private int progressStatus = 0;
-    private static int interval = 200;
-    Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

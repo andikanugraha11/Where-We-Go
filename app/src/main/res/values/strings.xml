@@ -9,7 +9,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="google_maps_key" translatable="false" templateMergeStrategy="preserve">
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">
        AIzaSyDWPycPE_o9BJFCml3TTdcG0CJMI_zIOXQ
    </string>
     <string name="check_out">Ceckout</string>
