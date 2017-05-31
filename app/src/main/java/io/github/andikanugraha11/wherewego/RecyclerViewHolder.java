@@ -2,6 +2,7 @@ package io.github.andikanugraha11.wherewego;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -13,6 +14,7 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
     public TextView nama,lokasi; //deklarasi textview
     public ImageView imageView;  //deklarasi imageview
+    public Button btnDetail;
 
     public RecyclerViewHolder(View itemView) {
         super(itemView);
@@ -20,5 +22,7 @@ public class RecyclerViewHolder extends RecyclerView.ViewHolder {
         nama= (TextView)itemView.findViewById(R.id.nama);
         lokasi= (TextView)itemView.findViewById(R.id.lokasi);
         imageView= (ImageView)itemView.findViewById(R.id.gambar);
+        btnDetail = (Button)itemView.findViewById(R.id.detail_button);
+
     }
 }

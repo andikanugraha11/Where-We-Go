@@ -58,13 +58,13 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
         holder.nama.setText(nama[position]);
-        holder.nama.setOnClickListener(clickListener);
-        holder.nama.setTag(holder);
+        holder.btnDetail.setOnClickListener(clickListener);
         holder.lokasi.setText(lokasi[position]);
-        holder.imageView.setOnClickListener(clickListener);
         holder.imageView.setImageResource(R.drawable.krb);
         holder.imageView.setTag(holder);
         holder.lokasi.setTag(holder);
+        holder.btnDetail.setTag(holder);
+        holder.nama.setTag(holder);
 
     }
 
@@ -77,7 +77,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
             int position = vholder.getPosition();
 
 
-            Toast.makeText(context, "Menu ini berada di posisi " + position, Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "Lihat detail dari : " + nama[position], Toast.LENGTH_LONG).show();
 
 
         }
