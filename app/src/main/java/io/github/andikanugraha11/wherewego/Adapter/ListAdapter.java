@@ -2,6 +2,7 @@ package io.github.andikanugraha11.wherewego.Adapter;
 
 import android.content.Context;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,8 +18,27 @@ import io.github.andikanugraha11.wherewego.RecyclerViewHolder;
 
 public class ListAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
     private final Context context;
-    String [] name={"Apple","Facebook","Twitter","Google",
-            "Microsoft","Wikipedia","Yahoo","Youtube"};
+    String [] nama={
+            "Kebun Raya Bogor",
+            "Puncak Bogor",
+            "Taman Bunga Nusantara",
+            "The Junggle",
+            "Junggle Land",
+            "Surya Kencana",
+            "Tas Tajur",
+            "Taman Sempur"
+    };
+
+    String [] lokasi= {
+            "Jl. Ir. Haji Djuanda No.13, Paledang, Bogor Tengah, Kota Bogor, Jawa Barat 16122",
+            "Puncak, Bogor, Ciloto, Cipanas, Kabupaten Cianjur, Jawa Barat",
+            "Jl. Mariwati KM.7, Kawungluwuk, Sukaresmi, Kabupaten Cianjur, Jawa Barat 43254",
+            "Jalan Bogor Nirwana Boulevard Dreded Pahlawan, Perumahan Bogor Nirwana Residence, Bogor, Jawa Barat 16132",
+            "Kawasan Sentul Nirwana, Jalan Jungleland Boulevard No. 1, Karang Tengah, Babakan Madang, Bogor, Jawa Barat 16810",
+            "Jl. Suryakencana, Kota Bogor, Jawa Barat",
+            "Jalan Raya Tajur No.33, Pakuan, Bogor Sel., Kota Bogor, Jawa Barat 16134",
+            "Jl. Sempur Kidul No.65, Sempur, Bogor Tengah, Kota Bogor, Jawa Barat 16129"
+    };
 
 
     LayoutInflater inflater;
@@ -37,12 +57,14 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerViewHolder holder, int position) {
-
-        holder.tv1.setText(name[position]);
-        holder.tv1.setOnClickListener(clickListener);
+        holder.nama.setText(nama[position]);
+        holder.nama.setOnClickListener(clickListener);
+        holder.nama.setTag(holder);
+        holder.lokasi.setText(lokasi[position]);
         holder.imageView.setOnClickListener(clickListener);
-        holder.tv1.setTag(holder);
+        holder.imageView.setImageResource(R.drawable.krb);
         holder.imageView.setTag(holder);
+        holder.lokasi.setTag(holder);
 
     }
 
@@ -65,7 +87,7 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
     @Override
     public int getItemCount() {
-        return name.length;
+        return nama.length;
     }
 
 }

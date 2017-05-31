@@ -11,14 +11,14 @@ import android.widget.TextView;
 
 public class RecyclerViewHolder extends RecyclerView.ViewHolder {
 
-    public TextView tv1,tv2; //deklarasi textview
+    public TextView nama,lokasi; //deklarasi textview
     public ImageView imageView;  //deklarasi imageview
 
     public RecyclerViewHolder(View itemView) {
         super(itemView);
 
-        tv1= (TextView) itemView.findViewById(R.id.nama);
-        tv2= (TextView) itemView.findViewById(R.id.lokasi);
-        imageView= (ImageView) itemView.findViewById(R.id.gambar);
+        nama= (TextView)itemView.findViewById(R.id.nama);
+        lokasi= (TextView)itemView.findViewById(R.id.lokasi);
+        imageView= (ImageView)itemView.findViewById(R.id.gambar);
     }
 }
