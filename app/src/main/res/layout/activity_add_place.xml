@@ -11,7 +11,7 @@
     tools:context="io.github.andikanugraha11.wherewego.Activity.AddPlace">
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/input_tempat"
+
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
@@ -19,6 +19,7 @@
         android:layout_height="wrap_content">
 
         <EditText
+            android:id="@+id/input_tempat"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nama Tempat" />
@@ -51,6 +52,7 @@
         android:orientation="horizontal">
 
         <Button
+            android:id="@+id/addImage"
             style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="85dp"
             android:layout_height="85dp"
@@ -58,6 +60,10 @@
             android:text="Gambar"
             android:textAlignment="center"
             android:textSize="10dp" />
+        <ImageView
+            android:id="@+id/imagePreview"
+            android:layout_width="85dp"
+            android:layout_height="85dp" />
 
     </LinearLayout>
 
