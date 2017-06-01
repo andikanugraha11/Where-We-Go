@@ -27,8 +27,10 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.nearby.messages.Strategy;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -40,18 +42,22 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.andikanugraha11.wherewego.Model.ModelPlace;
 import io.github.andikanugraha11.wherewego.R;
 
 import static io.github.andikanugraha11.wherewego.R.id.imageView;
+import static io.github.andikanugraha11.wherewego.R.id.input_lokasi;
 
 public class AddPlace extends AppCompatActivity{
     Button btnLokasi, btnAddImage, btnSubmit;
     ImageView imgPreview;
-    EditText txtNama;
-    String latLng;
+    EditText txtNama, txtDeskripsi;
+    TextView txtLatlng;
+    String latLng, downloadUrlDb;
     private GoogleApiClient mGoogleApiClient;
     private StorageReference mStorageRef;
     private Uri filePath;
+
     private static final int REQUEST_PLACE_PICKER = 1;
     private static final int PICK_IMAGE_REQUEST = 234;
     private static final String FIREBASE_URL = "https://where-we-go-1496040390287.firebaseio.com/";
@@ -63,7 +69,8 @@ public class AddPlace extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
 
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(FIREBASE_ROOT_NODE);
+        final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(FIREBASE_ROOT_NODE);
+
 
 
 
@@ -74,6 +81,9 @@ public class AddPlace extends AppCompatActivity{
         btnSubmit = (Button)findViewById(R.id.submit);
         imgPreview = (ImageView) findViewById(R.id.imagePreview);
         txtNama = (EditText) findViewById(R.id.input_tempat);
+        txtDeskripsi = (EditText)findViewById(R.id.input_deskripsi);
+        txtLatlng = (TextView)findViewById(R.id.latLang);
+
 
         btnLokasi.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,6 +126,9 @@ public class AddPlace extends AppCompatActivity{
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                                     progressDialog.dismiss();
+                                    @SuppressWarnings("VisibleForTests")
+                                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                                    downloadUrlDb = downloadUrl.toString();
                                     Toast.makeText(getApplicationContext(), "File Uploaded ", Toast.LENGTH_LONG).show();
                                 }
                             })
@@ -127,8 +140,20 @@ public class AddPlace extends AppCompatActivity{
                                 }
                             });
 
-                    Map<String, Object> checkoutData = new HashMap<>();
-                    checkoutData.put("time", ServerValue.TIMESTAMP);
+                    String placeId = mDatabase.push().getKey();
+                    String nama = txtNama.getText().toString();
+                    String deskripsi = txtDeskripsi.getText().toString();
+                    String latLng = txtLatlng.getText().toString();
+                    String author = "Andika Nugraha";
+                    String gambar = downloadUrlDb;
+                    ModelPlace place = new ModelPlace(nama, deskripsi, author, latLng, gambar);
+                    mDatabase.child(placeId).setValue(place).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Intent intent = new Intent(AddPlace.this, HomeActivity.class);
+                            startActivity(intent);
+                        }
+                    });
                 }
                 else
                 {
