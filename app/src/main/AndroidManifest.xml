@@ -35,7 +35,15 @@
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".Activity.AddPlace" />
-        <activity android:name=".Activity.DetailActivity"></activity>
+        <activity
+            android:name=".Activity.DetailActivity"
+            android:label="@string/title_activity_detail"
+            android:parentActivityName=".Activity.HomeActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="io.github.andikanugraha11.wherewego.Activity.HomeActivity" />
+        </activity>
     </application>
 
 </manifest>

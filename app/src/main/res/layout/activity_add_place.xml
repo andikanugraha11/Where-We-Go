@@ -5,6 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layout_marginTop="25dp"
+    android:layout_marginLeft="15dp"
+    android:layout_marginRight="15dp"
     tools:context="io.github.andikanugraha11.wherewego.Activity.AddPlace">
 
     <android.support.design.widget.TextInputLayout
@@ -27,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="15dp"
         android:layout_height="wrap_content">
 
         <EditText
@@ -45,16 +48,19 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
+
         <Button
+            style="@style/Widget.AppCompat.Button.Borderless"
             android:layout_width="85dp"
             android:layout_height="85dp"
-            android:drawableTop ="@android:drawable/ic_menu_add"
-            android:textAlignment="center"
+            android:drawableTop="@drawable/ic_add_black_24dp"
             android:text="Gambar"
-            android:textSize="10dp"
-            />
+            android:textAlignment="center"
+            android:textSize="10dp" />
+
     </LinearLayout>
+
     <Button
         android:id="@+id/input_lokasi"
         android:layout_marginLeft="8dp"
@@ -62,6 +68,7 @@
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_map_black_24dp"
         android:text="Pilih lokasi" />
 
     <Button
@@ -71,6 +78,7 @@
         android:layout_marginTop="8dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_save_black_24dp"
         android:text="Simpan" />
 
     <TextView

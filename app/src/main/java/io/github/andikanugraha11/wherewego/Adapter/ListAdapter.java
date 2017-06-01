@@ -2,13 +2,14 @@ package io.github.andikanugraha11.wherewego.Adapter;
 
 import android.content.Context;
 
-import android.graphics.drawable.Drawable;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import io.github.andikanugraha11.wherewego.Activity.DetailActivity;
 import io.github.andikanugraha11.wherewego.R;
 import io.github.andikanugraha11.wherewego.RecyclerViewHolder;
 
@@ -78,6 +79,9 @@ public class ListAdapter extends RecyclerView.Adapter<RecyclerViewHolder> {
 
 
             Toast.makeText(context, "Lihat detail dari : " + nama[position], Toast.LENGTH_LONG).show();
+
+            Intent intent = new Intent(v.getContext(), DetailActivity.class);
+            v.getContext().startActivity(intent);
 
 
         }
