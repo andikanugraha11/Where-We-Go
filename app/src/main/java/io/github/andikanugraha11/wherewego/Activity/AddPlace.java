@@ -19,6 +19,7 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.ServerValue;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
@@ -28,12 +29,16 @@ import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.nearby.messages.Strategy;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.github.andikanugraha11.wherewego.R;
 
@@ -43,6 +48,7 @@ public class AddPlace extends AppCompatActivity{
     Button btnLokasi, btnAddImage, btnSubmit;
     ImageView imgPreview;
     EditText txtNama;
+    String latLng;
     private GoogleApiClient mGoogleApiClient;
     private StorageReference mStorageRef;
     private Uri filePath;
@@ -57,9 +63,9 @@ public class AddPlace extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_place);
 
-        Firebase.setAndroidContext(this.getApplicationContext());
-        mFirebase = new Firebase(FIREBASE_URL);
-        mFirebase.child(FIREBASE_ROOT_NODE);
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(FIREBASE_ROOT_NODE);
+
+
 
         mStorageRef = FirebaseStorage.getInstance().getReference();
 
@@ -98,8 +104,8 @@ public class AddPlace extends AppCompatActivity{
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String namaFile = txtNama.toString().trim().toLowerCase();
-                if(filePath != null){
+                String namaFile = txtNama.getText().toString().toLowerCase().replace(" ","-");
+                if((filePath != null) && (latLng != null) && (namaFile !=null)){
                     final ProgressDialog progressDialog = new ProgressDialog(v.getContext());
                     progressDialog.setTitle("Mengunggah");
                     progressDialog.show();
@@ -120,10 +126,13 @@ public class AddPlace extends AppCompatActivity{
                                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                                 }
                             });
+
+                    Map<String, Object> checkoutData = new HashMap<>();
+                    checkoutData.put("time", ServerValue.TIMESTAMP);
                 }
                 else
                 {
-                    Toast.makeText(getApplicationContext(), "Silahkan pilih file gambar", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Silahkan lengkapi data", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -133,9 +142,9 @@ public class AddPlace extends AppCompatActivity{
         if (requestCode == REQUEST_PLACE_PICKER) {
             if (resultCode == RESULT_OK) {
                 Place place = PlacePicker.getPlace(data, this);
-                String toastMsg = String.format("Place: %s", place.getName());
-                String LatLng = place.getLatLng().toString();
-                Toast.makeText(this, LatLng, Toast.LENGTH_LONG).show();
+//                String toastMsg = String.format("Place: %s", place.getName());
+                latLng = place.getLatLng().toString();
+//                Toast.makeText(this, LatLng, Toast.LENGTH_LONG).show();
             }
         }
 
