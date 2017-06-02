@@ -1,21 +1,35 @@
 package io.github.andikanugraha11.wherewego.Model;
 
+import java.util.ArrayList;
+
 /**
  * Created by andika on 01/06/17.
  */
 
 public class ModelPlace {
 
-    String nama, deskripsi, author, latLng, gambar;
+    String name, description, author, address, lat, lng, images;
     public ModelPlace(){
 
     }
 
-    public ModelPlace(String nama, String deskripsi, String author, String latLng, String gambar){
-        this.nama = nama;
-        this.deskripsi = deskripsi;
-        this.author = author;
-        this.latLng = latLng;
-        this.gambar = gambar;
+    public  ModelPlace(String images){
+        this.images = images;
     }
+
+    public ModelPlace(String name, String description, String author, String address){
+        this.name = name;
+        this.description = description;
+        this.author = author;
+        this.address = address;
+        this.images = images;
+    }
+
+    public ModelPlace(String lat, String lng){
+        this.lat = lat;
+        this.lng = lng;
+    }
+
+    //public ModelPlace(String gambar1,)
 }
+

@@ -65,6 +65,7 @@
             android:layout_width="85dp"
             android:layout_height="85dp" />
 
+
     </LinearLayout>
 
     <Button
@@ -87,11 +88,5 @@
         android:drawableLeft="@drawable/ic_save_black_24dp"
         android:text="Simpan" />
 
-    <TextView
-        android:id="@+id/latLang"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        />
 
 </LinearLayout>
