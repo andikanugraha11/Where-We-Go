@@ -8,10 +8,45 @@
     tools:context="io.github.andikanugraha11.wherewego.Activity.DetailActivity"
     tools:showIn="@layout/activity_detail">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
-
+        android:orientation="vertical">
+        <TextView
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:gravity="right"
+            android:id="@+id/author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Author : Andika Nugraha"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Alamat : "
+            />
+        <TextView
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+        />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Deskripsi :"
+            />
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+        />
+        <Button
+            android:id="@+id/direction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tunjukan Arah"/>
+    </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

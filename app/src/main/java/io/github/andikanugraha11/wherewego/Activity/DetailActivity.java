@@ -1,35 +1,97 @@
 package io.github.andikanugraha11.wherewego.Activity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.TextSliderView;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
+import java.util.Locale;
 
+import io.github.andikanugraha11.wherewego.Model.ModelGetPlace;
 import io.github.andikanugraha11.wherewego.R;
 
 public class DetailActivity extends AppCompatActivity{
     private SliderLayout mToolBarSlider;
+
+    Button btnDirection;
+    TextView txtAuthor, txtDescription, txtAddress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("KRB");
+
+
+        Intent i = getIntent();
+        Bundle b = i.getExtras();
+        String nameTitle = b.getString("Name");
+        toolbar.setTitle(nameTitle);
         setSupportActionBar(toolbar);
+
+        String author = b.getString("Author");
+        String address = b.getString("Address");
+        String description = b.getString("Description");
+
+
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        final DatabaseReference myRef = database.getReference("place").child(id);
+
+
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mToolBarSlider = (SliderLayout)findViewById(R.id.slider);
+        btnDirection = (Button)findViewById(R.id.direction);
+        txtAuthor = (TextView)findViewById(R.id.author);
+        txtDescription = (TextView)findViewById(R.id.description);
+        txtAddress = (TextView)findViewById(R.id.address);
+        txtAuthor.setText(author);
+        txtDescription.setText(description);
+        txtAddress.setText(address);
+
+//        myRef.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                ModelGetPlace place = dataSnapshot.getValue(ModelGetPlace.class);
+//                author.setText(place.getAddress());
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+
+        //author.setText(id);
+
+        btnDirection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String latitude = "-6.17511";
+                String longitude = "106.8650395";
+                String uri = "http://maps.google.com/maps?q=loc:" + latitude + "," + longitude + " (Rumah Kita)";
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(intent);
+            }
+        });
 
         HashMap<String,Integer> file_maps = new HashMap<String, Integer>();
         file_maps.put("KRB 1",R.drawable.krb);
