@@ -32,7 +32,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import io.github.andikanugraha11.wherewego.Model.ModelPlace;
 import io.github.andikanugraha11.wherewego.R;
@@ -124,22 +123,26 @@ public class AddPlace extends AppCompatActivity{
                                     String nama = txtNama.getText().toString();
                                     String deskripsi = txtDeskripsi.getText().toString();
                                     String author = "Andika Nugraha";
-                                    HashMap<String, String> gambar = new HashMap<String, String>();
-                                    gambar.put("0", downloadUrlDb);
+                                    String gambar = downloadUrlDb;
                                     String alamat = address;
-                                    ModelPlace place = new ModelPlace(nama, deskripsi, author, alamat, gambar);
+                                    ModelPlace place = new ModelPlace(nama, deskripsi, author, alamat);
                                     final ModelPlace location = new ModelPlace(lat,lng);
-
-
+                                    final ModelPlace images = new ModelPlace(gambar);
                                     mDatabase.child(placeId).setValue(place).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             mDatabase.child(placeId).child("location").setValue(location).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
-                                                    Intent intent = new Intent(AddPlace.this, HomeActivity.class);
-                                                    startActivity(intent);
-                                                    finish();
+                                                    mDatabase.child(placeId).child("images").setValue(images).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                        @Override
+                                                        public void onComplete(@NonNull Task<Void> task) {
+                                                            Intent intent = new Intent(AddPlace.this, HomeActivity.class);
+                                                            startActivity(intent);
+                                                            finish();
+                                                        }
+                                                    });
+
                                                 }
                                             });
 

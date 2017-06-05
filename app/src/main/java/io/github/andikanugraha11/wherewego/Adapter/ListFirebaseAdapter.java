@@ -1,6 +1,9 @@
 package io.github.andikanugraha11.wherewego.Adapter;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 
 import com.google.firebase.database.Query;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,8 +67,11 @@ public class ListFirebaseAdapter extends FirebaseRecyclerAdapter<ListFirebaseAda
 
     @Override public void onBindViewHolder(ListFirebaseAdapter.ViewHolder holder, final int position) {
         final ModelGetPlace item = getItem(position);
+//        Log.e("tes images: ", item.getImages().get("imagesPrimary").toString() );
+        new DownloadImageTask(holder.imageView)
+                .execute(item.getImages().get("imagesPrimary").toString() );
         holder.txtTitle.setText(item.getName());
-        holder.imageView.setImageResource(R.drawable.krb);
+//        holder.imageView.setImageResource(R.drawable.krb);
         holder.txtContent.setText(item.getAddress());
         holder.btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +103,31 @@ public class ListFirebaseAdapter extends FirebaseRecyclerAdapter<ListFirebaseAda
 
     @Override protected void itemMoved(ModelGetPlace item, String key, int oldPosition, int newPosition) {
         Log.d("MyAdapter", "Moved an item.");
+    }
+
+    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+        ImageView bmImage;
+
+        public DownloadImageTask(ImageView bmImage) {
+            this.bmImage = bmImage;
+        }
+
+        protected Bitmap doInBackground(String... urls) {
+            String urldisplay = urls[0];
+            Bitmap mIcon11 = null;
+            try {
+                InputStream in = new java.net.URL(urldisplay).openStream();
+                mIcon11 = BitmapFactory.decodeStream(in);
+            } catch (Exception e) {
+                Log.e("Error", e.getMessage());
+                e.printStackTrace();
+            }
+            return mIcon11;
+        }
+
+        protected void onPostExecute(Bitmap result) {
+            bmImage.setImageBitmap(result);
+        }
     }
 
 

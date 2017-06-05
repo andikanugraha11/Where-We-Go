@@ -12,19 +12,20 @@ public class ModelGetPlace {
 
 
     String name, address, author, description;
-    private HashMap<String, Object> location = new HashMap<String, Object>();
+    private HashMap<String, Object> location ,images = new HashMap<String, Object>();
     public  ModelGetPlace(){
 
     }
 
 
 
-    public  ModelGetPlace(String name, String address, String author, String description, HashMap<String, Object> location){
+    public  ModelGetPlace(String name, String address, String author, String description, HashMap<String, Object> location,  HashMap<String, Object> images){
         this.name = name;
         this.address = address;
         this.author = author;
         this.description = description;
         this.location = location;
+        this.images = images;
 
     }
 
@@ -66,5 +67,13 @@ public class ModelGetPlace {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public HashMap<String, Object> getImages() {
+        return images;
+    }
+
+    public void setImages(HashMap<String, Object> images) {
+        this.images = images;
     }
 }
