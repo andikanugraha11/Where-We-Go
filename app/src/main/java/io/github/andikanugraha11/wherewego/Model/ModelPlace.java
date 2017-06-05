@@ -1,6 +1,7 @@
 package io.github.andikanugraha11.wherewego.Model;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by andika on 01/06/17.
@@ -8,16 +9,18 @@ import java.util.ArrayList;
 
 public class ModelPlace {
 
-    String name, description, author, address, lat, lng, images;
+    String name, description, author, address, lat, lng;
+    HashMap<String, String> images = new HashMap<String, String>();
     public ModelPlace(){
 
     }
 
-    public  ModelPlace(String images){
-        this.images = images;
-    }
+//    public  ModelPlace(HashMap<String, String> images){
+//
+//        this.images = images;
+//    }
 
-    public ModelPlace(String name, String description, String author, String address){
+    public ModelPlace(String name, String description, String author, String address, HashMap<String, String> images){
         this.name = name;
         this.description = description;
         this.author = author;

@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 import io.github.andikanugraha11.wherewego.Model.ModelGetPlace;
 import io.github.andikanugraha11.wherewego.R;
@@ -42,7 +44,7 @@ public class DetailActivity extends AppCompatActivity{
 
         Intent i = getIntent();
         Bundle b = i.getExtras();
-        String nameTitle = b.getString("Name");
+        final String nameTitle = b.getString("Name");
         toolbar.setTitle(nameTitle);
         setSupportActionBar(toolbar);
 
@@ -50,7 +52,9 @@ public class DetailActivity extends AppCompatActivity{
         String address = b.getString("Address");
         String description = b.getString("Description");
 
-
+//        HashMap<String, Object> latLng = new HashMap<String, Object>();
+        final HashMap<String, Object> latLng = (HashMap<String, Object>)b.getSerializable("latLng");
+        //Log.e("Test latlng", latLng.get("lat").toString() );
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
 //        final DatabaseReference myRef = database.getReference("place").child(id);
 
@@ -85,9 +89,9 @@ public class DetailActivity extends AppCompatActivity{
         btnDirection.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String latitude = "-6.17511";
-                String longitude = "106.8650395";
-                String uri = "http://maps.google.com/maps?q=loc:" + latitude + "," + longitude + " (Rumah Kita)";
+                String latitude = latLng.get("lat").toString();
+                String longitude = latLng.get("lng").toString();
+                String uri = "http://maps.google.com/maps?q=loc:" + latitude + "," + longitude + "("+nameTitle+")";
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uri));
                 startActivity(intent);
             }

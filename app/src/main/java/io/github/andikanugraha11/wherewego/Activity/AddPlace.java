@@ -32,6 +32,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import io.github.andikanugraha11.wherewego.Model.ModelPlace;
 import io.github.andikanugraha11.wherewego.R;
@@ -123,26 +124,22 @@ public class AddPlace extends AppCompatActivity{
                                     String nama = txtNama.getText().toString();
                                     String deskripsi = txtDeskripsi.getText().toString();
                                     String author = "Andika Nugraha";
-                                    String gambar = downloadUrlDb;
+                                    HashMap<String, String> gambar = new HashMap<String, String>();
+                                    gambar.put("0", downloadUrlDb);
                                     String alamat = address;
-                                    ModelPlace place = new ModelPlace(nama, deskripsi, author, alamat);
+                                    ModelPlace place = new ModelPlace(nama, deskripsi, author, alamat, gambar);
                                     final ModelPlace location = new ModelPlace(lat,lng);
-                                    final ModelPlace images = new ModelPlace(gambar);
+
+
                                     mDatabase.child(placeId).setValue(place).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             mDatabase.child(placeId).child("location").setValue(location).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
-                                                    mDatabase.child(placeId).child("images").child("0").setValue(images).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            Intent intent = new Intent(AddPlace.this, HomeActivity.class);
-                                                            startActivity(intent);
-                                                            finish();
-                                                        }
-                                                    });
-
+                                                    Intent intent = new Intent(AddPlace.this, HomeActivity.class);
+                                                    startActivity(intent);
+                                                    finish();
                                                 }
                                             });
 

@@ -76,6 +76,7 @@ public class ListFirebaseAdapter extends FirebaseRecyclerAdapter<ListFirebaseAda
                 intent.putExtra("Author", item.getAuthor());
                 intent.putExtra("Address", item.getAddress());
                 intent.putExtra("Description", item.getDescription());
+                intent.putExtra("latLng", item.getLocation());
                 v.getContext().startActivity(intent);
             }
         });

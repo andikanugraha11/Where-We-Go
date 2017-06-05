@@ -1,5 +1,9 @@
 package io.github.andikanugraha11.wherewego.Model;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+
 /**
  * Created by andika on 03/06/17.
  */
@@ -8,16 +12,28 @@ public class ModelGetPlace {
 
 
     String name, address, author, description;
-
+    private HashMap<String, Object> location = new HashMap<String, Object>();
     public  ModelGetPlace(){
 
     }
 
-    public  ModelGetPlace(String name, String address, String author, String description){
+
+
+    public  ModelGetPlace(String name, String address, String author, String description, HashMap<String, Object> location){
         this.name = name;
         this.address = address;
         this.author = author;
         this.description = description;
+        this.location = location;
+
+    }
+
+    public HashMap<String, Object> getLocation() {
+        return location;
+    }
+
+    public void setLocation(HashMap<String, Object> location) {
+        this.location = location;
     }
 
     public String getName() {
