@@ -9,13 +9,15 @@ import java.util.ArrayList;
 public class ModelPlace {
 
     String name, description, author, address, lat, lng, imagesPrimary, imagesSecondary ;
+
+
+
+
     public ModelPlace(){
 
     }
 
-    public  ModelPlace(String images){
-        this.imagesPrimary = images;
-    }
+
 
     public ModelPlace(String name, String description, String author, String address){
         this.name = name;
@@ -28,6 +30,10 @@ public class ModelPlace {
     public ModelPlace(String lat, String lng){
         this.lat = lat;
         this.lng = lng;
+    }
+
+    public  ModelPlace(String images){
+        this.imagesPrimary = images;
     }
 
     //public ModelPlace(String gambar1,)

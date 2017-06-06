@@ -2,13 +2,16 @@ package io.github.andikanugraha11.wherewego.Activity;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,9 +28,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -38,6 +43,7 @@ import io.github.andikanugraha11.wherewego.R;
 
 
 public class AddPlace extends AppCompatActivity{
+
     Button btnLokasi, btnAddImage, btnSubmit;
     ImageView imgPreview;
     EditText txtNama, txtDeskripsi;
@@ -57,7 +63,7 @@ public class AddPlace extends AppCompatActivity{
         setContentView(R.layout.activity_add_place);
 
         final DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference(FIREBASE_ROOT_NODE);
-
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
 
 
 
@@ -108,48 +114,51 @@ public class AddPlace extends AppCompatActivity{
                     progressDialog.setTitle("Mengunggah");
                     progressDialog.show();
 
-                    StorageReference riversRef = mStorageRef.child("images/"+namaFile+".jpg");
+                    final StorageReference riversRef = mStorageRef.child("images/"+namaFile+".jpg");
                     riversRef.putFile(filePath)
                             .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                                    progressDialog.dismiss();
-                                    @SuppressWarnings("VisibleForTests")
-                                    Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                                    downloadUrlDb = downloadUrl.toString();
-                                    Toast.makeText(getApplicationContext(), downloadUrlDb, Toast.LENGTH_LONG).show();
 
-                                    final String placeId = mDatabase.push().getKey();
-                                    String nama = txtNama.getText().toString();
-                                    String deskripsi = txtDeskripsi.getText().toString();
-                                    String author = "Andika Nugraha";
-                                    String gambar = downloadUrlDb;
-                                    String alamat = address;
-                                    ModelPlace place = new ModelPlace(nama, deskripsi, author, alamat);
-                                    final ModelPlace location = new ModelPlace(lat,lng);
-                                    final ModelPlace images = new ModelPlace(gambar);
-                                    mDatabase.child(placeId).setValue(place).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    riversRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                                         @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            mDatabase.child(placeId).child("location").setValue(location).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        public void onSuccess(Uri uri) {
+                                            progressDialog.dismiss();
+
+                                            Toast.makeText(getApplicationContext(), uri.toString(), Toast.LENGTH_LONG).show();
+                                            final String placeId = mDatabase.push().getKey();
+                                            String nama = txtNama.getText().toString();
+                                            String deskripsi = txtDeskripsi.getText().toString();
+                                            String author = "Andika Nugraha";
+                                            final String gambar = downloadUrlDb;
+                                            String alamat = address;
+                                            ModelPlace place = new ModelPlace(nama, deskripsi, author, alamat);
+                                            final ModelPlace location = new ModelPlace(lat,lng);
+                                            final ModelPlace images = new ModelPlace(gambar);
+
+                                            mDatabase.child(placeId).setValue(place).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<Void> task) {
-                                                    mDatabase.child(placeId).child("images").setValue(images).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                    mDatabase.child(placeId).child("location").setValue(location).addOnCompleteListener(new OnCompleteListener<Void>() {
                                                         @Override
                                                         public void onComplete(@NonNull Task<Void> task) {
-                                                            Intent intent = new Intent(AddPlace.this, HomeActivity.class);
-                                                            startActivity(intent);
-                                                            finish();
+
+                                                            mDatabase.child(placeId).child("images").setValue(images).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    Intent intent = new Intent(AddPlace.this, HomeActivity.class);
+                                                                    startActivity(intent);
+                                                                    finish();
+                                                                }
+                                                            });
+
                                                         }
                                                     });
 
                                                 }
                                             });
-
                                         }
                                     });
-
-
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -158,8 +167,12 @@ public class AddPlace extends AppCompatActivity{
                                     progressDialog.dismiss();
                                     Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_LONG).show();
                                 }
-                            });
+                            }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
 
+                        }
+                    });
 
                 }
                 else
@@ -178,7 +191,9 @@ public class AddPlace extends AppCompatActivity{
                 lat = String.valueOf(place.getLatLng().latitude);
                 lng = String.valueOf(place.getLatLng().longitude);
                 address = place.getAddress().toString();
-                Toast.makeText(this, address, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, lat, Toast.LENGTH_LONG).show();
+                Log.e("onActivit: LATLNG ", lat );
+                Log.e("onActivity LATLNG ", lng );
             }
         }
 

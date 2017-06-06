@@ -1,10 +1,12 @@
 package io.github.andikanugraha11.wherewego.Adapter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.support.annotation.Nullable;
+import android.support.multidex.MultiDex;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -68,10 +70,11 @@ public class ListFirebaseAdapter extends FirebaseRecyclerAdapter<ListFirebaseAda
     @Override public void onBindViewHolder(ListFirebaseAdapter.ViewHolder holder, final int position) {
         final ModelGetPlace item = getItem(position);
 //        Log.e("tes images: ", item.getImages().get("imagesPrimary").toString() );
-        new DownloadImageTask(holder.imageView)
-                .execute(item.getImages().get("imagesPrimary").toString() );
+//        new DownloadImageTask(holder.imageView)
+//                .execute(item.getImages().get("imagesPrimary").toString() );
+//
         holder.txtTitle.setText(item.getName());
-//        holder.imageView.setImageResource(R.drawable.krb);
+        holder.imageView.setImageResource(R.drawable.krb);
         holder.txtContent.setText(item.getAddress());
         holder.btnDetail.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,10 +1,12 @@
 package io.github.andikanugraha11.wherewego.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.multidex.MultiDex;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -30,6 +32,7 @@ import io.github.andikanugraha11.wherewego.Model.ModelGetPlace;
 import io.github.andikanugraha11.wherewego.R;
 
 public class DetailActivity extends AppCompatActivity{
+
     private SliderLayout mToolBarSlider;
 
     Button btnDirection;

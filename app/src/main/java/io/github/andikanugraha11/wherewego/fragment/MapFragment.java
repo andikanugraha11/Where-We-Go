@@ -8,10 +8,12 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +27,14 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.firebase.client.ServerValue;
+
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.ResultCallbacks;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
@@ -41,22 +46,25 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.andikanugraha11.wherewego.Model.ModelGetPlace;
 import io.github.andikanugraha11.wherewego.R;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback {
+public class MapFragment extends Fragment implements OnMapReadyCallback, ChildEventListener {
     private GoogleMap mMap;
     private LatLngBounds.Builder mBounds = new LatLngBounds.Builder();
     private GoogleApiClient mGoogleApiClient;
     private Firebase mFirebase;
-    private static final int REQUEST_PLACE_PICKER = 1;
-
-    private static final String FIREBASE_URL = "https://where-we-go-1496040390287.firebaseio.com/";
-    private static final String FIREBASE_ROOT_NODE = "checkouts";
     private Button btnCheckOut;
+    private static final String FIREBASE_URL = "https://where-we-go-1496040390287.firebaseio.com";
+    private static final String FIREBASE_ROOT_NODE = "place";
     public MapFragment() {
         // Required empty public constructor
     }
@@ -74,13 +82,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         transaction.commit();
 
         fragment.getMapAsync(this);
-
         //add picker
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity().getApplicationContext())
                 .addApi(Places.GEO_DATA_API)
                 .build();
         mGoogleApiClient.connect();
 
+        Firebase.setAndroidContext(getActivity().getApplicationContext());
+        mFirebase = new Firebase(FIREBASE_URL);
+        mFirebase.child(FIREBASE_ROOT_NODE).addChildEventListener(this);
 
 
         return inflater.inflate(R.layout.fragment_map, container, false);
@@ -120,7 +130,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
 
 
-
     }
 
     //pointer
@@ -130,7 +139,35 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
 
+    @Override
+    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+        String lat = dataSnapshot.child("location").child("lat").getValue().toString();
+        String lng = dataSnapshot.child("location").child("lng").getValue().toString();
+        LatLng location = new LatLng(
+                Double.valueOf(lat),Double.valueOf(lng)
+        );
+        addPointToViewPort(location);
+        mMap.addMarker(new MarkerOptions().position(location));
 
+    }
 
+    @Override
+    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
+    }
+
+    @Override
+    public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+    }
+
+    @Override
+    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+    }
+
+    @Override
+    public void onCancelled(FirebaseError firebaseError) {
+
+    }
 }

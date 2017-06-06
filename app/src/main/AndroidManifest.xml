@@ -44,6 +44,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="io.github.andikanugraha11.wherewego.Activity.HomeActivity" />
         </activity>
+        <activity android:name=".Activity.signIn"></activity>
     </application>
 
 </manifest>

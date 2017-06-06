@@ -70,7 +70,6 @@ public class HomeFragment extends Fragment {
 //
 //                for(DataSnapshot placeSnapshoot : dataSnapshot.getChildren()){
 //                    final String placeId = placeSnapshoot.getKey();
-//
 //                    //ModelGetPlace place = placeSnapshoot.getValue(ModelGetPlace.class);
 //                    myRef.child(placeId).addValueEventListener(new ValueEventListener() {
 //                        @Override
