@@ -67,6 +67,7 @@ public class signIn extends AppCompatActivity implements
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
+
                 .build();
         // [END config_signin]
 
@@ -132,7 +133,7 @@ public class signIn extends AppCompatActivity implements
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Toast.makeText(signIn.this, "Authentication failed.",
+                            Toast.makeText(signIn.this, "Anda tidak login",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -185,6 +186,8 @@ public class signIn extends AppCompatActivity implements
         if (user != null) {
             mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+            Log.e("updateUI: ", user.getDisplayName());
+            Log.e("updateUI: ", user.getPhotoUrl().toString());
 
             findViewById(R.id.sign_in_button).setVisibility(View.GONE);
             findViewById(R.id.sign_out_and_disconnect).setVisibility(View.VISIBLE);
