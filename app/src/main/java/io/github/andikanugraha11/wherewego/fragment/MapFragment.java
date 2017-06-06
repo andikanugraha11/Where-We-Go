@@ -45,6 +45,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -54,6 +55,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.github.andikanugraha11.wherewego.Activity.DetailActivity;
 import io.github.andikanugraha11.wherewego.Model.ModelGetPlace;
 import io.github.andikanugraha11.wherewego.R;
 
@@ -63,8 +65,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ChildEv
     private GoogleApiClient mGoogleApiClient;
     private Firebase mFirebase;
     private Button btnCheckOut;
+    HashMap<Marker,DataMarker> hm = new HashMap<Marker, DataMarker>();
     private static final String FIREBASE_URL = "https://where-we-go-1496040390287.firebaseio.com";
     private static final String FIREBASE_ROOT_NODE = "place";
+
+
     public MapFragment() {
         // Required empty public constructor
     }
@@ -82,6 +87,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ChildEv
         transaction.commit();
 
         fragment.getMapAsync(this);
+
         //add picker
         mGoogleApiClient = new GoogleApiClient.Builder(getActivity().getApplicationContext())
                 .addApi(Places.GEO_DATA_API)
@@ -97,6 +103,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ChildEv
 
 
     }
+
+
 
     @Override
     public void onMapReady(GoogleMap map) {
@@ -128,7 +136,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ChildEv
             }
         });
 
-
+//        mFirebase.child()
 
     }
 
@@ -143,11 +151,46 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ChildEv
     public void onChildAdded(DataSnapshot dataSnapshot, String s) {
         String lat = dataSnapshot.child("location").child("lat").getValue().toString();
         String lng = dataSnapshot.child("location").child("lng").getValue().toString();
-        LatLng location = new LatLng(
-                Double.valueOf(lat),Double.valueOf(lng)
-        );
-        addPointToViewPort(location);
-        mMap.addMarker(new MarkerOptions().position(location));
+        String nameLocation = dataSnapshot.child("name").getValue().toString();
+        String addressLocation = dataSnapshot.child("address").getValue().toString();
+        String author = dataSnapshot.child("author").getValue().toString();
+        String description = dataSnapshot.child("description").getValue().toString();
+        HashMap<String, Object> latLng = (HashMap<String, Object>)dataSnapshot.child("location").getValue();
+        if(latLng != null){
+            LatLng location = new LatLng(
+                    Double.valueOf(lat),Double.valueOf(lng)
+            );
+            //addPointToViewPort(location);
+            Marker locationMarker = mMap.addMarker(new MarkerOptions().position(location).title(nameLocation).snippet(addressLocation));
+
+            hm.put(locationMarker, new DataMarker(nameLocation, addressLocation, author, description, latLng ));
+
+
+            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    marker.showInfoWindow();
+                    return false;
+                }
+            });
+
+            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                @Override
+                public void onInfoWindowClick(Marker marker) {
+
+//                Toast.makeText(getContext(), hm.get(marker).getAddress() , Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(getContext(), DetailActivity.class);
+                    intent.putExtra("Name", hm.get(marker).getName());
+                    intent.putExtra("Author", hm.get(marker).getAuthor());
+                    intent.putExtra("Address", hm.get(marker).getAddress());
+                    intent.putExtra("Description", hm.get(marker).getDescription());
+                    intent.putExtra("latLng", hm.get(marker).getLocation());
+                    getContext().startActivity(intent);
+                }
+            });
+        }
+
+
 
     }
 
@@ -169,5 +212,63 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ChildEv
     @Override
     public void onCancelled(FirebaseError firebaseError) {
 
+    }
+    public class DataMarker {
+        private HashMap<String, Object> location ,images = new HashMap<String, Object>();
+        String name;
+        String address;
+        String author;
+        String description;
+
+
+        public DataMarker(){}
+
+        public DataMarker(String name, String address, String author, String description, HashMap<String, Object> latLng){
+
+            this.name = name;
+            this.address = address;
+            this.author = author;
+            this.description = description;
+            this.location = latLng;
+        }
+        public String getAddress() {
+            return address;
+        }
+
+        public void setAddress(String address) {
+            this.address = address;
+
+        }
+        public String getAuthor() {
+            return author;
+        }
+
+        public void setAuthor(String author) {
+            this.author = author;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String descriptio) {
+            this.description = description;
+        }
+
+        public HashMap<String, Object> getLocation() {
+            return location;
+        }
+
+        public void setLocation(HashMap<String, Object> location) {
+            this.location = location;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 }
