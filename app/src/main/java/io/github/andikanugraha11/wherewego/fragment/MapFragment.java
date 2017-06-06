@@ -59,7 +59,7 @@ import io.github.andikanugraha11.wherewego.Activity.DetailActivity;
 import io.github.andikanugraha11.wherewego.Model.ModelGetPlace;
 import io.github.andikanugraha11.wherewego.R;
 
-public class MapFragment extends Fragment implements OnMapReadyCallback, ChildEventListener {
+public class MapFragment extends Fragment implements OnMapReadyCallback {
     private GoogleMap mMap;
     private LatLngBounds.Builder mBounds = new LatLngBounds.Builder();
     private GoogleApiClient mGoogleApiClient;
@@ -96,7 +96,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ChildEv
 
         Firebase.setAndroidContext(getActivity().getApplicationContext());
         mFirebase = new Firebase(FIREBASE_URL);
-        mFirebase.child(FIREBASE_ROOT_NODE).addChildEventListener(this);
+//        mFirebase.child(FIREBASE_ROOT_NODE);
 
 
         return inflater.inflate(R.layout.fragment_map, container, false);
@@ -136,7 +136,72 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ChildEv
             }
         });
 
-//        mFirebase.child()
+        mFirebase.child(FIREBASE_ROOT_NODE).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String lat = dataSnapshot.child("location").child("lat").getValue().toString();
+                String lng = dataSnapshot.child("location").child("lng").getValue().toString();
+                String nameLocation = dataSnapshot.child("name").getValue().toString();
+                String addressLocation = dataSnapshot.child("address").getValue().toString();
+                String author = dataSnapshot.child("author").getValue().toString();
+                String description = dataSnapshot.child("description").getValue().toString();
+                HashMap<String, Object> latLng = (HashMap<String, Object>)dataSnapshot.child("location").getValue();
+                if(latLng != null){
+                    LatLng location = new LatLng(
+                            Double.valueOf(lat),Double.valueOf(lng)
+                    );
+                    //addPointToViewPort(location);
+                    Marker locationMarker = mMap.addMarker(new MarkerOptions().position(location).title(nameLocation).snippet(addressLocation));
+
+                    hm.put(locationMarker, new DataMarker(nameLocation, addressLocation, author, description, latLng ));
+
+
+                    mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                        @Override
+                        public boolean onMarkerClick(Marker marker) {
+                            marker.showInfoWindow();
+                            return false;
+                        }
+                    });
+
+                    mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                        @Override
+                        public void onInfoWindowClick(Marker marker) {
+
+//                Toast.makeText(getContext(), hm.get(marker).getAddress() , Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getContext(), DetailActivity.class);
+                            intent.putExtra("Name", hm.get(marker).getName());
+                            intent.putExtra("Author", hm.get(marker).getAuthor());
+                            intent.putExtra("Address", hm.get(marker).getAddress());
+                            intent.putExtra("Description", hm.get(marker).getDescription());
+                            intent.putExtra("latLng", hm.get(marker).getLocation());
+                            getContext().startActivity(intent);
+                        }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
     }
 
@@ -147,72 +212,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, ChildEv
     }
 
 
-    @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        String lat = dataSnapshot.child("location").child("lat").getValue().toString();
-        String lng = dataSnapshot.child("location").child("lng").getValue().toString();
-        String nameLocation = dataSnapshot.child("name").getValue().toString();
-        String addressLocation = dataSnapshot.child("address").getValue().toString();
-        String author = dataSnapshot.child("author").getValue().toString();
-        String description = dataSnapshot.child("description").getValue().toString();
-        HashMap<String, Object> latLng = (HashMap<String, Object>)dataSnapshot.child("location").getValue();
-        if(latLng != null){
-            LatLng location = new LatLng(
-                    Double.valueOf(lat),Double.valueOf(lng)
-            );
-            //addPointToViewPort(location);
-            Marker locationMarker = mMap.addMarker(new MarkerOptions().position(location).title(nameLocation).snippet(addressLocation));
 
-            hm.put(locationMarker, new DataMarker(nameLocation, addressLocation, author, description, latLng ));
-
-
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker) {
-                    marker.showInfoWindow();
-                    return false;
-                }
-            });
-
-            mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-                @Override
-                public void onInfoWindowClick(Marker marker) {
-
-//                Toast.makeText(getContext(), hm.get(marker).getAddress() , Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(getContext(), DetailActivity.class);
-                    intent.putExtra("Name", hm.get(marker).getName());
-                    intent.putExtra("Author", hm.get(marker).getAuthor());
-                    intent.putExtra("Address", hm.get(marker).getAddress());
-                    intent.putExtra("Description", hm.get(marker).getDescription());
-                    intent.putExtra("latLng", hm.get(marker).getLocation());
-                    getContext().startActivity(intent);
-                }
-            });
-        }
-
-
-
-    }
-
-    @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-    }
-
-    @Override
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-    }
-
-    @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-    }
-
-    @Override
-    public void onCancelled(FirebaseError firebaseError) {
-
-    }
     public class DataMarker {
         private HashMap<String, Object> location ,images = new HashMap<String, Object>();
         String name;
