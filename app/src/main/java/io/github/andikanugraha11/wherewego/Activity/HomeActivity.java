@@ -58,7 +58,7 @@ public class HomeActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -78,6 +78,11 @@ public class HomeActivity extends AppCompatActivity
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());
+                if(tab.getPosition() == 1){
+                    fab.hide();
+                }else{
+                    fab.show();
+                }
             }
 
             @Override
@@ -91,14 +96,20 @@ public class HomeActivity extends AppCompatActivity
             }
         });
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
 //                        .setAction("Action", null).show();
-                Intent intent = new Intent(HomeActivity.this, AddPlace.class);
-                startActivity(intent);
+                if(user != null){
+                    Intent intent = new Intent(HomeActivity.this, AddPlace.class);
+                    startActivity(intent);
+                }else{
+                    Intent intent = new Intent(HomeActivity.this, signIn.class);
+                    startActivity(intent);
+                }
+
             }
         });
 
@@ -109,10 +120,16 @@ public class HomeActivity extends AppCompatActivity
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        if(user != null){
+            navigationView.getMenu().findItem(R.id.nav_login).setVisible(false);
+        }else{
+            navigationView.getMenu().findItem(R.id.nav_logout).setVisible(false);
+        }
         navigationView.setNavigationItemSelectedListener(this);
 
 
         if (user != null) {
+
             View headerView = navigationView.getHeaderView(0);
             CircleImageView mIvProfileImage;
             mIvProfileImage = (CircleImageView)headerView.findViewById(R.id.profile_image);
@@ -178,18 +195,15 @@ public class HomeActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_login) {
             Intent intent = new Intent(HomeActivity.this, signIn.class);
             startActivity(intent);
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_logout) {
+            FirebaseAuth.getInstance().signOut();
+            Intent intent = getIntent();
+            finish();
+            startActivity(intent);
+        } else if (id == R.id.nav_about) {
 
         }
 
@@ -222,5 +236,6 @@ public class HomeActivity extends AppCompatActivity
             bmImage.setImageBitmap(result);
         }
     }
+
 
 }

@@ -9,6 +9,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -56,6 +57,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.github.andikanugraha11.wherewego.Activity.DetailActivity;
+import io.github.andikanugraha11.wherewego.Activity.HomeActivity;
 import io.github.andikanugraha11.wherewego.Model.ModelGetPlace;
 import io.github.andikanugraha11.wherewego.R;
 
@@ -159,10 +161,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                     mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                         @Override
                         public boolean onMarkerClick(Marker marker) {
+//                            HomeActivity fab = (HomeActivity)getActivity();
+//                            fab.hideFab.setVisibility(View.INVISIBLE);
                             marker.showInfoWindow();
                             return false;
                         }
                     });
+
 
                     mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
                         @Override
